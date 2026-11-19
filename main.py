@@ -121,6 +121,11 @@ def video_info(request: Request, url: str, x_api_key: str = Header(...)):
         "platform": data.get("extractor_key"),
         "duration": data.get("duration"),
         "thumbnail": data.get("thumbnail"),
+        "view_count": data.get("view_count"),
+        "like_count": data.get("like_count"),
+        "follower_count": data.get("channel_follower_count"),
+        "upload_date": data.get("upload_date"),
+        "uploader_avatar": data.get("uploader_avatar"),
         "available_qualities": heights,
     }
 
@@ -174,5 +179,5 @@ def download_video(
         media_type=media_type,
         filename=files[0],
         background=BackgroundTask(shutil.rmtree, tmpdir, ignore_errors=True),
-    )
+        )
     
