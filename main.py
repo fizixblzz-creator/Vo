@@ -49,6 +49,7 @@ BASE_OPTS = {
     "allowed_extractors": ["default", "-generic"],  # blocks arbitrary-URL fetching
     "socket_timeout": 20,
     "retries": 3,
+    "concurrent_fragment_downloads": 4,
 }
 if COOKIES_FILE and os.path.isfile(COOKIES_FILE):
     BASE_OPTS["cookiefile"] = COOKIES_FILE
@@ -157,7 +158,11 @@ def download_video(
         ]
         media_type = "audio/mpeg"
     else:
-        opts["format"] = f"bv*[height<={quality}]+ba/b[height<={quality}]/bv*+ba/b"
+        opts["format"] = (
+            f"bv*[height<={quality}][ext=mp4]+ba[ext=m4a]"
+            f"/b[height<={quality}][ext=mp4]"
+            f"/bv*[height<={quality}]+ba/b[height<={quality}]/bv*+ba/b"
+        )
         opts["merge_output_format"] = "mp4"
         media_type = "video/mp4"
 
