@@ -9,6 +9,7 @@ import yt_dlp
 from fastapi import FastAPI, Header, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from pathlib import Path
 from starlette.background import BackgroundTask
 
 API_KEY = os.getenv("API_KEY", "change-me")
@@ -81,6 +82,11 @@ def validate_url(url: str):
     )
     if not ok:
         raise HTTPException(400, "This platform is not supported")
+
+
+@app.get("/", include_in_schema=False)
+def home():
+    return FileResponse(Path(__file__).parent / "index.html", media_type="text/html")
 
 
 @app.get("/health")
@@ -169,3 +175,4 @@ def download_video(
         filename=files[0],
         background=BackgroundTask(shutil.rmtree, tmpdir, ignore_errors=True),
     )
+    
